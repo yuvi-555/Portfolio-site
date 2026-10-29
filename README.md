@@ -7,7 +7,7 @@ A one-page portfolio for Yogesh Kokane, copywriter and scriptwriter (Solapur, In
 ```
 index.html        page markup (sections, nav, typewriter)
 css/styles.css    all styling, light and dark themes
-js/data.js        CONTENT: lines, campaigns, work history, films, blog posts, book quotes
+js/data.js        CONTENT: lines, campaigns, work history, films, blog posts
 js/main.js        behavior: hero, film strip, reader, typewriter brief, nav
 images/           artwork thumbnails used in "Outside the brief"
 ```
@@ -34,7 +34,7 @@ Most changes happen in `js/data.js`:
 | `E` | Work history and projects |
 | `F` | Films, songs and videos |
 | `B` | Blog posts |
-| `Q` | Pull quotes from the book draft |
+| Blog posts | Long-form writing samples and article links are in `index.html` |
 
 Artwork captions and the "Also" list are in `index.html`. Colors are CSS variables at the top of `css/styles.css`.
 
