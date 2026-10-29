@@ -120,3 +120,15 @@ footer{background:var(--dk);color:#A99F8E;padding:26px 0 40px;font:400 .9rem "Co
 .ig-link-card a{display:inline-block;margin-top:auto;padding:9px 16px;border:1px solid var(--ink);border-radius:999px;text-decoration:none;font-weight:700}
 .ig-link-card a:hover{background:var(--gold);color:#14110F;border-color:var(--gold)}
 @media(max-width:720px){.ig-test{padding:16px}.ig-compare{grid-template-columns:1fr}.ig-link-card{min-height:0}}
+
+
+/* Compact Instagram painting embed: styled to sit in the artwork grid */
+.art figure:has(.art-ig-embed){min-width:0;overflow:hidden}
+.art-ig{display:block;color:#14110F;text-decoration:none;min-width:0}
+.art-ig-embed{margin:0!important;padding:0!important;width:100%!important;min-width:0!important;max-width:none!important;max-height:100%!important;overflow:hidden!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:#fff!important}
+.art-ig-embed iframe{max-width:100%!important}
+.art-ig-fallback{min-height:0;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#f5f0e7;color:#14110F;font-size:2.1rem}
+.art-ig-fallback span{font:600 .9rem "Courier Prime",monospace;text-align:center;padding:0 8px}
+.art figcaption{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px}
+.art-original{font:700 .75rem "Courier Prime",monospace;color:var(--red);text-decoration:none;white-space:nowrap}
+.art-original:hover{text-decoration:underline}
