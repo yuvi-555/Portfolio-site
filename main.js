@@ -8,7 +8,7 @@ $("#theme").onclick=()=>{const a=root.getAttribute("data-theme"),d=a?a==="dark":
 /* slugline + typewriter words */
 const slug=$("#slug"),st="INT. A DESK IN SOLAPUR. DAY.";let si=0;
 if(reduce)slug.textContent=st;else(function t(){slug.textContent=st.slice(0,++si);if(si<st.length)setTimeout(t,55)})();
-const words=["slogans","ad scripts","captions","brand voice","film scripts","book chapters"],tw=$("#tw");let wi=0,ci=0,del=false;
+const words=["slogans","ad scripts","captions","brand voice","film scripts","long-form articles"],tw=$("#tw");let wi=0,ci=0,del=false;
 if(reduce)tw.textContent=words[0];else(function k(){const w=words[wi];ci+=del?-1:1;tw.textContent=w.slice(0,ci);let d=del?45:95;if(!del&&ci===w.length){del=true;d=1500}else if(del&&ci===0){del=false;wi=(wi+1)%words.length;d=320}setTimeout(k,d)})();
 /* spotlight */
 const hero=$("#top");if(!reduce)hero.addEventListener("pointermove",e=>{const r=hero.getBoundingClientRect();hero.style.setProperty("--mx",(e.clientX-r.left)+"px");hero.style.setProperty("--my",(e.clientY-r.top)+"px")});
@@ -35,9 +35,7 @@ $("#pw").innerHTML=C.map(c=>`<article class="pz"><div class="m">${esc(c.m)}</div
 /* screen */
 $("#tg").innerHTML=F.map((f,i)=>`<article class="tk"><div class="a">ADMIT ONE · ${String(i+1).padStart(2,"0")}</div><h3>${esc(f[0])}</h3><div class="r">${esc(f[1])}. ${esc(f[2])}.</div><a class="btn" href="${f[3]}" target="_blank" rel="noopener">Watch</a></article>`).join("");
 $("#bl").innerHTML=B.map(b=>`<li><a href="${b[2]}" target="_blank" rel="noopener">${esc(b[0])}<span>${esc(b[1])}</span></a></li>`).join("");
-/* book reader */
-let qi=0;const rd=$("#rd");function showQ(){rd.classList.add("out");setTimeout(()=>{$("#rc").textContent=Q[qi][0];$("#rq").textContent="“"+Q[qi][1]+"”";rd.classList.remove("out")},reduce?0:250)}
-$("#rn").onclick=()=>{qi=(qi+1)%Q.length;showQ()};$("#rp").onclick=()=>{qi=(qi+Q.length-1)%Q.length;showQ()};$("#rc").textContent=Q[0][0];$("#rq").textContent="“"+Q[0][1]+"”";
+/* Long-form writing is linked directly from the Writing section. */
 /* work */
 $("#cs").innerHTML=E.map(e=>`<div class="cs"><button aria-expanded="false"><span class="w">${esc(e.w)}</span><span class="t">${esc(e.t)}<small>${esc(e.o)}</small></span><span class="x" aria-hidden="true">+</span></button><div class="b">${e.d.length>1?"<ul>"+e.d.map(d=>`<li>${esc(d)}</li>`).join("")+"</ul>":`<p>${esc(e.d[0])}</p>`}</div></div>`).join("");
 $("#cs").addEventListener("click",ev=>{const b=ev.target.closest("button");if(!b)return;const c=b.closest(".cs"),o=c.classList.toggle("open");b.setAttribute("aria-expanded",String(o))});
@@ -54,7 +52,7 @@ needs.forEach(n=>{const b=document.createElement("button");b.className="chip";b.
 function build(){const list=needs.filter(n=>picked[n]).join(", ")||"(not chosen)";const body="Hi Yogesh,\n\nI'd like help with: "+list+"\n\n"+(ta.value||"(add a few lines)")+"\n\nThanks!";$("#send").href="mailto:yogeshkokane14@gmail.com?subject="+encodeURIComponent("Writing project: "+list)+"&body="+encodeURIComponent(body);return body}
 build();$("#copy").onclick=function(){const b=this;try{navigator.clipboard.writeText(build()).then(()=>{b.textContent="Copied";setTimeout(()=>{b.textContent="Copy"},1500)},()=>{})}catch(e){}};
 /* scroll: progress, nav, fab, reveal */
-const bar=$("#bar"),links=$$("nav a[data-s]"),fab=$("#fab"),ids=["lines","campaigns","screen","book","art","work","contact"];
+const bar=$("#bar"),links=$$("nav a[data-s]"),fab=$("#fab"),ids=["lines","campaigns","screen","writing","art","work","contact"];
 function onS(){const h=root;bar.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+"%";let cur="top";ids.forEach(id=>{if($("#"+id).getBoundingClientRect().top<innerHeight*.4)cur=id});links.forEach(a=>a.classList.toggle("on",a.dataset.s===cur));fab.classList.toggle("show",scrollY>600&&$("#contact").getBoundingClientRect().top>innerHeight*.6)}
 addEventListener("scroll",onS,{passive:true});onS();
 if(!reduce){root.classList.add("js");const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");ro.unobserve(e.target)}}),{threshold:.05});$$("section .wrap").forEach(x=>{x.classList.add("rv");ro.observe(x)})}
