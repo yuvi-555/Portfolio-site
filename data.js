@@ -1,6 +1,6 @@
 /* Content data for the portfolio. Edit lines, campaigns, work history, films, blog posts and book quotes here. */
 const L=[
-{l:"mr",q:"ठरलंय यंदा वापू तिसऱ्यांदा!",w:"Prabhav Advertising Agency",t:"Viral assembly slogan",h:1,p:1},
+{l:"mr",q:"ठरलंय यंदा बापू तिसऱ्यांदा!",w:"Prabhav Advertising Agency",t:"Viral assembly slogan",h:1,p:1},
 {l:"mr",q:"आमचा लोकपसंत.... कुंदा चहा! साध्या पेक्षा कडक, स्पेशल पेक्षा भारी!",w:"Hotel Jayshankar, Lamboti",t:"Instagram food post",h:1},
 {l:"mr",q:"तांबडा आहे, पांढरा आहे, ही कोल्हापुरी मटण थाळी म्हणजे विविध चवींची जत्रा आहे!",w:"Kolhapuri Mejwani, Solapur",t:"Instagram post"},
 {l:"mr",q:"अख्या जुळे सोलापुरात चर्चा आहे, जोगेश्वरी मिसळ ची चव दर्जा आहे!",w:"Jogeshwari Misal, Jule Solapur",t:"Instagram food post"},
