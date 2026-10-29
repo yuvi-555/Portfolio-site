@@ -53,7 +53,15 @@ function build(){const list=needs.filter(n=>picked[n]).join(", ")||"(not chosen)
 build();$("#copy").onclick=function(){const b=this;try{navigator.clipboard.writeText(build()).then(()=>{b.textContent="Copied";setTimeout(()=>{b.textContent="Copy"},1500)},()=>{})}catch(e){}};
 /* scroll: progress, nav, fab, reveal */
 const bar=$("#bar"),links=$$("nav a[data-s]"),fab=$("#fab"),ids=["lines","campaigns","screen","writing","art","work","contact"];
-function onS(){const h=root;bar.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+"%";let cur="top";ids.forEach(id=>{if($("#"+id).getBoundingClientRect().top<innerHeight*.4)cur=id});links.forEach(a=>a.classList.toggle("on",a.dataset.s===cur));fab.classList.toggle("show",scrollY>600&&$("#contact").getBoundingClientRect().top>innerHeight*.6)}
-addEventListener("scroll",onS,{passive:true});onS();
+function onS(){const h=root;bar.style.width=(h.scrollTop/Math.max(1,h.scrollHeight-h.clientHeight)*100)+"%";const active=$(".app-view.active");const cur=active?.id||"top";links.forEach(a=>a.classList.toggle("on",a.dataset.s===cur));fab.classList.toggle("show",cur!=="contact"&&h.scrollTop>260)}
+addEventListener("scroll",onS,{passive:true});
+/* App-like room navigation: each major section becomes a focused view. */
+const rooms=[{id:"top",name:"Home"},{id:"lines",name:"Lines"},{id:"campaigns",name:"Campaigns"},{id:"screen",name:"Screen"},{id:"writing",name:"Writing"},{id:"art",name:"Art"},{id:"work",name:"Work"},{id:"contact",name:"Brief me"}];
+const roomIndicator=document.createElement("div");roomIndicator.className="room-indicator";roomIndicator.setAttribute("aria-live","polite");roomIndicator.innerHTML='<span id="room-name">HOME</span><span id="room-count">01 / 08</span>';$("nav").after(roomIndicator);
+function showRoom(id,updateHash=false){const room=rooms.find(x=>x.id===id)||rooms[0];$(".app-view").forEach(v=>v.classList.toggle("active",v.id===room.id));root.classList.add("room-mode");document.body.classList.add("room-mode");$("#room-name").textContent=room.name.toUpperCase();$("#room-count").textContent=String(rooms.indexOf(room)+1).padStart(2,"0")+" / "+String(rooms.length).padStart(2,"0");links.forEach(a=>a.classList.toggle("on",a.dataset.s===room.id));if(updateHash){const hash=room.id==="top"?"#top":"#"+room.id;if(location.hash!==hash)history.pushState({room:room.id},"",hash)}window.scrollTo({top:0,behavior:reduce?"auto":"smooth"});onS()}
+document.addEventListener("click",e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const id=a.getAttribute("href").slice(1);const target=$("#"+CSS.escape(id));if(target&&target.classList.contains("app-view")){e.preventDefault();showRoom(id,true)}});
+addEventListener("hashchange",()=>showRoom(location.hash.slice(1)||"top",false));
+addEventListener("popstate",()=>showRoom(location.hash.slice(1)||"top",false));
+showRoom(location.hash.slice(1)||"top",false);
 if(!reduce){root.classList.add("js");const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");ro.unobserve(e.target)}}),{threshold:.05});$$("section .wrap").forEach(x=>{x.classList.add("rv");ro.observe(x)})}
 })();
