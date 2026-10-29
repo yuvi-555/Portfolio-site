@@ -103,3 +103,20 @@ footer{background:var(--dk);color:#A99F8E;padding:26px 0 40px;font:400 .9rem "Co
 .fav.posters li small{padding:12px 12px 4px}
 .fav.posters li span{display:block;padding:0 12px 14px;font:500 1.05rem "Fraunces",serif}
 @media(max-width:620px){.fav.posters{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.fav.posters li span{font-size:1rem}}
+
+
+/* Instagram display comparison */
+.ig-test{margin:34px 0 28px;padding:24px;border:1px solid var(--line);border-radius:6px;background:var(--paper2)}
+.ig-test h3{font-size:clamp(1.5rem,4vw,2rem);margin-bottom:8px}
+.ig-test>.sub{margin-bottom:22px}
+.ig-compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+.ig-option{min-width:0}
+.ig-label{font:700 .8rem "Courier Prime",monospace;letter-spacing:.08em;text-transform:uppercase;margin:0 0 10px;color:var(--muted)}
+.instagram-media{min-width:0!important}
+.ig-link-card{min-height:220px;display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:24px;background:var(--paper);border:1px solid var(--line);border-radius:4px}
+.ig-mark{font-size:2.4rem;line-height:1;color:var(--red)}
+.ig-link-card strong{font:800 1.3rem "Fraunces",serif}
+.ig-link-card p{color:var(--muted);margin:8px 0 0}
+.ig-link-card a{display:inline-block;margin-top:auto;padding:9px 16px;border:1px solid var(--ink);border-radius:999px;text-decoration:none;font-weight:700}
+.ig-link-card a:hover{background:var(--gold);color:#14110F;border-color:var(--gold)}
+@media(max-width:720px){.ig-test{padding:16px}.ig-compare{grid-template-columns:1fr}.ig-link-card{min-height:0}}
