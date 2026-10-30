@@ -174,3 +174,11 @@ body.room-mode .app-view.active .wrap{padding-bottom:40px}
 .work-groups h3{font-size:1.45rem;margin:0 0 12px;color:var(--red)}
 .work-groups .also{margin:0}
 @media(max-width:640px){.work-groups{grid-template-columns:1fr;gap:22px}.hero-about{font-size:1rem}}
+
+
+/* Evidence-led case study cards */
+.case-role{margin:0 0 14px;color:var(--red);font:700 .78rem "Courier Prime",monospace;text-transform:uppercase;letter-spacing:.04em}
+.case-part{margin:0 0 12px}
+.case-part b{display:block;margin-bottom:2px;color:#8b2b23;font:700 .72rem "Courier Prime",monospace;letter-spacing:.1em;text-transform:uppercase}
+.case-part p{margin:0}
+.pz blockquote{margin:8px 0 14px}
