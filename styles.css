@@ -164,3 +164,13 @@ body.room-mode .app-view.active .wrap{padding-bottom:40px}
  nav a,nav button{padding:6px 10px}
 }
 @media(prefers-reduced-motion:reduce){.app-view,.app-view.active>.wrap{animation:none!important}}
+
+
+/* Portfolio positioning and grouped experience */
+.hero-pitch{max-width:690px;margin:10px 0 8px;font:500 clamp(1.05rem,2.5vw,1.35rem)/1.5 "Mukta",sans-serif;color:#F1E8D6}
+.availability{margin:0 0 10px;color:var(--gold);font:700 .9rem "Courier Prime",monospace}
+.hero-about{max-width:660px;color:#A99F8E;margin:10px 0 22px}
+.work-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 42px;margin-top:28px}
+.work-groups h3{font-size:1.45rem;margin:0 0 12px;color:var(--red)}
+.work-groups .also{margin:0}
+@media(max-width:640px){.work-groups{grid-template-columns:1fr;gap:22px}.hero-about{font-size:1rem}}
