@@ -370,3 +370,42 @@ nav .links a.on{box-shadow:inset 0 -2px 0 #14110F}
  .hero .wrap::before{right:0;top:132px;font-size:.48rem}
 }
 @media(prefers-reduced-motion:reduce){.home-room-grid a::after{transition:none}}
+
+
+/* Responsive correction after real tablet review: prioritise legibility over ornament */
+@media (max-width:1100px){
+  .home-projects{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .home-project{min-height:300px}
+  .home-capability-layout{grid-template-columns:1fr;gap:24px}
+  .home-capability-layout>div:first-child{position:static}
+  .home-capabilities::after{display:none}
+  .hero .wrap::after,.hero .wrap::before{display:none}
+  .hero{background-image:radial-gradient(ellipse at 78% 10%,rgba(46,94,90,.13),transparent 42%)}
+}
+@media (max-width:680px){
+  .home-projects{grid-template-columns:1fr;gap:14px}
+  .home-project{min-height:0;padding:20px}
+  .home-project::before{height:112px}
+  .home-project h3{margin-top:112px;min-height:0}
+  .home-project p{margin-bottom:18px}
+  .home-explore-heading{display:block}
+  .home-room-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+/* Give all three featured projects one coherent paper-card structure */
+.home-project:not(.home-project-gold){background:var(--paper2);border-color:var(--line)}
+.home-project:nth-child(2)::before{background:linear-gradient(135deg,#29241f,#514638)}
+.home-project:nth-child(3)::before{background:linear-gradient(135deg,#173331,#2e5e5a)}
+.home-project:nth-child(2) h3,.home-project:nth-child(3) h3{color:var(--ink)}
+.home-project:nth-child(2) p,.home-project:nth-child(3) p{color:var(--muted)}
+.home-project:nth-child(2) a,.home-project:nth-child(3) a{color:var(--red)}
+.home-project-gold{background:#E8A317;border-color:#E8A317}
+.home-project-gold h3{color:#17120b}
+.home-project-gold p{color:#453315}
+.home-project-gold a{color:#17120b}
+.home-project::after{opacity:.55}
+.home-featured .home-intro{max-width:44em}
+.home-extra section:not(.home-end)::before{width:32px;height:2px}
+.home-capabilities::after{display:none}
+@media(prefers-reduced-motion:reduce){
+  .home-project:hover{transform:none}
+}
