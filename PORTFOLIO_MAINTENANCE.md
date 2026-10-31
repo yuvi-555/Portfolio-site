@@ -5,7 +5,7 @@
 ## Canonical source
 
 - Notion portfolio: https://app.notion.com/p/400e88f5786381c19822cea98e59e093
-- Live website: https://portfolio-site-virid-nu-73.vercel.app/
+- Live website: https://yogeshkokane.vercel.app/
 - Repository: https://github.com/yuvi-555/Portfolio-site
 
 Notion is the editorial source of truth for portfolio facts and approved content. The repository is the implementation source for layout, behavior, assets, and deployed code. Keep the two aligned.
