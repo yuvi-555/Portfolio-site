@@ -77,6 +77,7 @@ if(!reduce){root.classList.add("js");const ro=new IntersectionObserver(es=>es.fo
   if (reduceMotion) return;
 
   let activeTriggers = [];
+  let activeRevealTargets = [];
   let revealFrame = 0;
 
   function clearRevealTriggers(){
@@ -84,21 +85,25 @@ if(!reduce){root.classList.add("js");const ro=new IntersectionObserver(es=>es.fo
       if (trigger && trigger.kill) trigger.kill();
     });
     activeTriggers = [];
+    /* Restore off-screen cards before another room becomes active. */
+    if (gsap && activeRevealTargets.length) {
+      gsap.set(activeRevealTargets, {autoAlpha:1, clearProps:"opacity,visibility"});
+    }
+    activeRevealTargets = [];
   }
 
   function scrollReveal(elements, options){
     if (!gsap || !ScrollTrigger || !elements || !elements.length) return;
-    elements.forEach((element, index) => {
+    elements.forEach(element => {
+      /* Opacity-only reveals deliberately avoid competing with VanillaTilt's
+         transform on the same card element. */
       const tween = gsap.fromTo(element,
-        {autoAlpha:0, y:options.y || 22, rotateX:options.rotateX || 0},
+        {autoAlpha:0},
         {
           autoAlpha:1,
-          y:0,
-          rotateX:0,
           duration:options.duration || .7,
           delay:options.delay || 0,
           ease:options.ease || "power3.out",
-          clearProps:"transform",
           scrollTrigger:{
             trigger:element,
             start:options.start || "top 88%",
@@ -107,6 +112,7 @@ if(!reduce){root.classList.add("js");const ro=new IntersectionObserver(es=>es.fo
           }
         }
       );
+      activeRevealTargets.push(element);
       if (tween.scrollTrigger) activeTriggers.push(tween.scrollTrigger);
     });
   }
@@ -140,8 +146,8 @@ if(!reduce){root.classList.add("js");const ro=new IntersectionObserver(es=>es.fo
         {autoAlpha:1, y:0, duration:.78, stagger:.085, ease:"power3.out", clearProps:"transform"}
       );
     }
-    scrollReveal(Array.from(active.querySelectorAll(".home-project")), {y:28,rotateX:4,start:"top 86%",duration:.8});
-    scrollReveal(Array.from(active.querySelectorAll(".home-capability-layout, .home-room-grid a, .home-end-inner > *")), {y:20,start:"top 88%",duration:.65});
+    scrollReveal(Array.from(active.querySelectorAll(".home-project")), {start:"top 86%",duration:.8});
+    scrollReveal(Array.from(active.querySelectorAll(".home-capability-layout, .home-room-grid a, .home-end-inner > *")), {start:"top 88%",duration:.65});
   }
 
   function animateRoom(active){
@@ -155,7 +161,7 @@ if(!reduce){root.classList.add("js");const ro=new IntersectionObserver(es=>es.fo
     }
 
     const cards = active.querySelectorAll(".pz, .tk, .worklist > article, .art > figure, .fav > li, #cs > .cs, .work-groups > div, .twr, .needs, .ct");
-    scrollReveal(Array.from(cards), {y:24,rotateX:2,start:"top 90%",duration:.68});
+    scrollReveal(Array.from(cards), {start:"top 90%",duration:.68});
   }
 
   function revealActiveRoom(){
