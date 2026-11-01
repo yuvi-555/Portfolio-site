@@ -58,78 +58,10 @@ addEventListener("scroll",onS,{passive:true});
 /* App-like room navigation: each major section becomes a focused view. */
 const rooms=[{id:"top",name:"Home"},{id:"lines",name:"Lines"},{id:"campaigns",name:"Campaigns"},{id:"screen",name:"Screen"},{id:"writing",name:"Writing"},{id:"art",name:"Art"},{id:"work",name:"Work"},{id:"contact",name:"Brief me"}];
 const roomIndicator=document.createElement("div");roomIndicator.className="room-indicator";roomIndicator.setAttribute("aria-live","polite");roomIndicator.innerHTML='<span id="room-name">HOME</span><span id="room-count">01 / 08</span>';$("nav").after(roomIndicator);
-function showRoom(id,updateHash=false){const room=rooms.find(x=>x.id===id)||rooms[0];$$(".app-view").forEach(v=>v.classList.toggle("active",v.id===room.id));root.classList.add("room-mode");document.body.classList.add("room-mode");$("#room-name").textContent=room.name.toUpperCase();$("#room-count").textContent=String(rooms.indexOf(room)+1).padStart(2,"0")+" / "+String(rooms.length).padStart(2,"0");links.forEach(a=>{const active=a.dataset.s===room.id;a.classList.toggle("on",active);if(active)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});const activeLink=links.find(a=>a.dataset.s===room.id);if(activeLink){const rail=activeLink.parentElement;const left=activeLink.offsetLeft-rail.offsetLeft;const right=left+activeLink.offsetWidth;if(left<rail.scrollLeft)rail.scrollTo({left,behavior:reduce?"auto":"smooth"});else if(right>rail.scrollLeft+rail.clientWidth)rail.scrollTo({left:right-rail.clientWidth,behavior:reduce?"auto":"smooth"})}if(updateHash){const hash=room.id==="top"?"#top":"#"+room.id;if(location.hash!==hash)history.pushState({room:room.id},"",hash)}window.scrollTo({top:0,behavior:reduce?"auto":"smooth"});onS();window.dispatchEvent(new Event("yk:roomchange"))}
+function showRoom(id,updateHash=false){const room=rooms.find(x=>x.id===id)||rooms[0];$$(".app-view").forEach(v=>v.classList.toggle("active",v.id===room.id));root.classList.add("room-mode");document.body.classList.add("room-mode");$("#room-name").textContent=room.name.toUpperCase();$("#room-count").textContent=String(rooms.indexOf(room)+1).padStart(2,"0")+" / "+String(rooms.length).padStart(2,"0");links.forEach(a=>{const active=a.dataset.s===room.id;a.classList.toggle("on",active);if(active)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});const activeLink=links.find(a=>a.dataset.s===room.id);if(activeLink){const rail=activeLink.parentElement;const left=activeLink.offsetLeft-rail.offsetLeft;const right=left+activeLink.offsetWidth;if(left<rail.scrollLeft)rail.scrollTo({left,behavior:reduce?"auto":"smooth"});else if(right>rail.scrollLeft+rail.clientWidth)rail.scrollTo({left:right-rail.clientWidth,behavior:reduce?"auto":"smooth"})}if(updateHash){const hash=room.id==="top"?"#top":"#"+room.id;if(location.hash!==hash)history.pushState({room:room.id},"",hash)}window.scrollTo({top:0,behavior:reduce?"auto":"smooth"});onS()}
 document.addEventListener("click",e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const id=a.getAttribute("href").slice(1);const target=$("#"+CSS.escape(id));if(target&&target.classList.contains("app-view")){e.preventDefault();showRoom(id,true)}});
 addEventListener("hashchange",()=>showRoom(location.hash.slice(1)||"top",false));
 addEventListener("popstate",()=>showRoom(location.hash.slice(1)||"top",false));
 showRoom(location.hash.slice(1)||"top",false);
 if(!reduce){root.classList.add("js");const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");ro.unobserve(e.target)}}),{threshold:.05});$$("section .wrap").forEach(x=>{x.classList.add("rv");ro.observe(x)})}
-}
-
-/* cinematic motion layer: optional enhancement; core portfolio works without CDNs */
-(function cinematicMotion(){
-  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const gsap = window.gsap;
-  if (prefersReduced) return;
-
-  /* Entrance: reveal the existing editorial hero without changing its content. */
-  if (gsap) {
-    if (window.ScrollTrigger) gsap.registerPlugin(window.ScrollTrigger);
-    gsap.set([".hero .slugline", ".hero h1", ".hero .role", ".hero-pitch", ".hero-about", ".hero .writes", ".hero .btns"], {opacity:0, y:22});
-    gsap.to(".hero .slugline", {opacity:1,y:0,duration:.65,ease:"power3.out",delay:.08});
-    gsap.to(".hero h1", {opacity:1,y:0,duration:.9,ease:"power4.out",delay:.16});
-    gsap.to([".hero .role", ".hero-pitch", ".hero-about", ".hero .writes", ".hero .btns"], {
-      opacity:1,y:0,duration:.72,stagger:.11,ease:"power3.out",delay:.3
-    });
-    gsap.fromTo(".home-project", {opacity:0,y:30,rotateX:5}, {
-      opacity:1,y:0,rotateX:0,duration:.8,stagger:.13,ease:"power3.out",
-      scrollTrigger:{trigger:".home-featured",start:"top 82%",once:true}
-    });
-    gsap.fromTo(".home-room-grid a", {opacity:0,y:18}, {
-      opacity:1,y:0,duration:.55,stagger:.07,ease:"power2.out",
-      scrollTrigger:{trigger:".home-explore",start:"top 82%",once:true}
-    });
-    gsap.fromTo(".home-end-inner > *", {opacity:0,y:20}, {
-      opacity:1,y:0,duration:.65,stagger:.1,ease:"power3.out",
-      scrollTrigger:{trigger:".home-end",start:"top 82%",once:true}
-    });
-  }
-
-  /* The campaign cards are rendered from data.js, so initialise tilt after main.js builds them. */
-  const initTilt = () => {
-    if (!window.VanillaTilt) return;
-    document.querySelectorAll(".pz, .home-project, .home-room-grid a").forEach(el => {
-      if (el.vanillaTilt) return;
-      window.VanillaTilt.init(el, {
-        max: el.classList.contains("pz") ? 7 : 4,
-        speed: 650,
-        scale: 1.015,
-        glare: true,
-        "max-glare": .13,
-        perspective: 1100,
-        gyroscope: false
-      });
-    });
-  };
-  initTilt();
-
-  /* Re-run a short, elegant reveal whenever the app-like room changes. */
-  const baseShowRoom = window.__ykShowRoom;
-  const roomReveal = () => {
-    const active = document.querySelector(".app-view.active");
-    if (!active || !gsap) return;
-    const targets = active.id === "top"
-      ? active.querySelectorAll(".home-featured, .home-capabilities, .home-explore, .home-end")
-      : active.querySelectorAll(".wrap > .slugline, .wrap > h2, .wrap > .sub, .wrap > .pz, .wrap > .tk, .worklist > article, .art > figure, .fav > li, .work-groups > div");
-    if (targets.length) gsap.fromTo(targets, {opacity:0,y:18}, {
-      opacity:1,y:0,duration:.58,stagger:.055,ease:"power2.out",overwrite:"auto",clearProps:"transform"
-    });
-    if (window.ScrollTrigger) window.ScrollTrigger.refresh();
-    initTilt();
-  };
-  window.addEventListener("yk:roomchange", () => requestAnimationFrame(roomReveal));
-  window.addEventListener("pageshow", () => requestAnimationFrame(roomReveal));
-  requestAnimationFrame(roomReveal);
-})();
-
 })();
