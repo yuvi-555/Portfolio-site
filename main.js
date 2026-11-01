@@ -66,70 +66,120 @@ showRoom(location.hash.slice(1)||"top",false);
 if(!reduce){root.classList.add("js");const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");ro.unobserve(e.target)}}),{threshold:.05});$$("section .wrap").forEach(x=>{x.classList.add("rv");ro.observe(x)})}
 }
 
-/* cinematic motion layer: optional enhancement; core portfolio works without CDNs */
+/* Cinematic motion layer — progressive enhancement over the existing vanilla site.
+   data.js and all existing content/rendering logic above remain the source of truth. */
 (function cinematicMotion(){
-  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const gsap = window.gsap;
-  if (prefersReduced) return;
+  const ScrollTrigger = window.ScrollTrigger;
+  const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-  /* Entrance: reveal the existing editorial hero without changing its content. */
-  if (gsap) {
-    if (window.ScrollTrigger) gsap.registerPlugin(window.ScrollTrigger);
-    gsap.set([".hero .slugline", ".hero h1", ".hero .role", ".hero-pitch", ".hero-about", ".hero .writes", ".hero .btns"], {opacity:0, y:22});
-    gsap.to(".hero .slugline", {opacity:1,y:0,duration:.65,ease:"power3.out",delay:.08});
-    gsap.to(".hero h1", {opacity:1,y:0,duration:.9,ease:"power4.out",delay:.16});
-    gsap.to([".hero .role", ".hero-pitch", ".hero-about", ".hero .writes", ".hero .btns"], {
-      opacity:1,y:0,duration:.72,stagger:.11,ease:"power3.out",delay:.3
+  if (reduceMotion) return;
+
+  let activeTriggers = [];
+  let revealFrame = 0;
+
+  function clearRevealTriggers(){
+    activeTriggers.forEach(trigger => {
+      if (trigger && trigger.kill) trigger.kill();
     });
-    gsap.fromTo(".home-project", {opacity:0,y:30,rotateX:5}, {
-      opacity:1,y:0,rotateX:0,duration:.8,stagger:.13,ease:"power3.out",
-      scrollTrigger:{trigger:".home-featured",start:"top 82%",once:true}
-    });
-    gsap.fromTo(".home-room-grid a", {opacity:0,y:18}, {
-      opacity:1,y:0,duration:.55,stagger:.07,ease:"power2.out",
-      scrollTrigger:{trigger:".home-explore",start:"top 82%",once:true}
-    });
-    gsap.fromTo(".home-end-inner > *", {opacity:0,y:20}, {
-      opacity:1,y:0,duration:.65,stagger:.1,ease:"power3.out",
-      scrollTrigger:{trigger:".home-end",start:"top 82%",once:true}
+    activeTriggers = [];
+  }
+
+  function scrollReveal(elements, options){
+    if (!gsap || !ScrollTrigger || !elements || !elements.length) return;
+    elements.forEach((element, index) => {
+      const tween = gsap.fromTo(element,
+        {autoAlpha:0, y:options.y || 22, rotateX:options.rotateX || 0},
+        {
+          autoAlpha:1,
+          y:0,
+          rotateX:0,
+          duration:options.duration || .7,
+          delay:options.delay || 0,
+          ease:options.ease || "power3.out",
+          clearProps:"transform",
+          scrollTrigger:{
+            trigger:element,
+            start:options.start || "top 88%",
+            once:true,
+            invalidateOnRefresh:true
+          }
+        }
+      );
+      if (tween.scrollTrigger) activeTriggers.push(tween.scrollTrigger);
     });
   }
 
-  /* The campaign cards are rendered from data.js, so initialise tilt after main.js builds them. */
-  const initTilt = () => {
-    if (!window.VanillaTilt) return;
-    document.querySelectorAll(".pz, .home-project, .home-room-grid a").forEach(el => {
-      if (el.vanillaTilt) return;
-      window.VanillaTilt.init(el, {
-        max: el.classList.contains("pz") ? 7 : 4,
-        speed: 650,
-        scale: 1.015,
-        glare: true,
-        "max-glare": .13,
-        perspective: 1100,
-        gyroscope: false
+  function initTilt(){
+    if (!canHover || !window.VanillaTilt) return;
+    const cards = document.querySelectorAll(".pz, .home-project, .home-room-grid a, .tk");
+    cards.forEach(element => {
+      if (element.dataset.ykTilt === "true" || element.vanillaTilt) return;
+      element.dataset.ykTilt = "true";
+      window.VanillaTilt.init(element, {
+        max:element.classList.contains("pz") ? 7 : 4,
+        speed:650,
+        scale:1.012,
+        glare:true,
+        "max-glare":.12,
+        perspective:1100,
+        gyroscope:false,
+        reset:true,
+        transition:true
       });
     });
-  };
-  initTilt();
+  }
 
-  /* Re-run a short, elegant reveal whenever the app-like room changes. */
-  const baseShowRoom = window.__ykShowRoom;
-  const roomReveal = () => {
-    const active = document.querySelector(".app-view.active");
-    if (!active || !gsap) return;
-    const targets = active.id === "top"
-      ? active.querySelectorAll(".home-featured, .home-capabilities, .home-explore, .home-end")
-      : active.querySelectorAll(".wrap > .slugline, .wrap > h2, .wrap > .sub, .wrap > .pz, .wrap > .tk, .worklist > article, .art > figure, .fav > li, .work-groups > div");
-    if (targets.length) gsap.fromTo(targets, {opacity:0,y:18}, {
-      opacity:1,y:0,duration:.58,stagger:.055,ease:"power2.out",overwrite:"auto",clearProps:"transform"
+  function animateHome(active){
+    if (!gsap) return;
+    const intro = active.querySelectorAll(".wrap > .slugline, .wrap > h1, .wrap > .role, .wrap > .hero-pitch, .wrap > .availability, .wrap > .hero-about, .wrap > .writes, .wrap > .btns, .wrap > .home-scroll-cue");
+    if (intro.length) {
+      gsap.fromTo(intro,
+        {autoAlpha:0, y:24},
+        {autoAlpha:1, y:0, duration:.78, stagger:.085, ease:"power3.out", clearProps:"transform"}
+      );
+    }
+    scrollReveal(Array.from(active.querySelectorAll(".home-project")), {y:28,rotateX:4,start:"top 86%",duration:.8});
+    scrollReveal(Array.from(active.querySelectorAll(".home-capability-layout, .home-room-grid a, .home-end-inner > *")), {y:20,start:"top 88%",duration:.65});
+  }
+
+  function animateRoom(active){
+    if (!gsap) return;
+    const intro = active.querySelectorAll(".wrap > .slugline, .wrap > h2, .wrap > .sub");
+    if (intro.length) {
+      gsap.fromTo(intro,
+        {autoAlpha:0, y:18},
+        {autoAlpha:1, y:0, duration:.62, stagger:.08, ease:"power3.out", clearProps:"transform"}
+      );
+    }
+
+    const cards = active.querySelectorAll(".pz, .tk, .worklist > article, .art > figure, .fav > li, #cs > .cs, .work-groups > div, .twr, .needs, .ct");
+    scrollReveal(Array.from(cards), {y:24,rotateX:2,start:"top 90%",duration:.68});
+  }
+
+  function revealActiveRoom(){
+    cancelAnimationFrame(revealFrame);
+    revealFrame = requestAnimationFrame(() => {
+      clearRevealTriggers();
+      const active = document.querySelector(".app-view.active");
+      if (!active) return;
+      if (active.id === "top") animateHome(active);
+      else animateRoom(active);
+      initTilt();
+      if (ScrollTrigger) requestAnimationFrame(() => ScrollTrigger.refresh());
     });
-    if (window.ScrollTrigger) window.ScrollTrigger.refresh();
-    initTilt();
-  };
-  window.addEventListener("yk:roomchange", () => requestAnimationFrame(roomReveal));
-  window.addEventListener("pageshow", () => requestAnimationFrame(roomReveal));
-  requestAnimationFrame(roomReveal);
-})();
+  }
 
+  /* The original navigation dispatches this event after changing the active room. */
+  window.addEventListener("yk:roomchange", revealActiveRoom);
+  window.addEventListener("pageshow", revealActiveRoom);
+  window.addEventListener("resize", () => {
+    if (ScrollTrigger) ScrollTrigger.refresh();
+  }, {passive:true});
+
+  /* main.js renders campaign, film and experience cards before this layer runs. */
+  initTilt();
+  revealActiveRoom();
+})();
 })();
